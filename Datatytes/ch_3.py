@@ -1,5 +1,7 @@
 # integer
-
+import sys
+from fractions import Fraction
+from decimal import Decimal
 num1 = 10
 num2 = 20
 
@@ -43,3 +45,33 @@ is_sunny = False
 print(f"Is it raining? {is_raining}")
 print(f"Is it sunny? {is_sunny}")
 
+is_boiling = True
+stri_count = 5
+
+total_actions = stri_count + is_boiling #upcasting, True is treated as 1 and False is treated as 0
+print(f"Total actions: {total_actions}")
+
+milk_present = 0
+print(f"is milk present? {bool(milk_present)}") # 0 is treated as False, any non-zero value is treated as True
+
+
+# logical operators
+# and, or, not
+
+
+age = 30
+is_teenager = age >= 10 and age <= 19
+print(f"Is the person a teenager? {is_teenager}")
+
+#leap year
+year = 1900
+is_leap_year = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+print(f"Is {year} a leap year? {is_leap_year}")
+
+
+# real numbers
+pi = 3.14159
+radius = 5
+circumference = 2 * pi * radius
+print(f"Circumference of the circle: {circumference}")
+print(sys.float_info)
