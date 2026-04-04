@@ -1,1 +1,1 @@
-print("Fuck you 2 Mona")
+print("Fuck you 2 All")
