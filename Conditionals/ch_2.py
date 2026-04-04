@@ -1,6 +1,6 @@
 #order
 
-snack = input("Enter your snack: ")
+snack = input("Enter your snack: ").lower()
 
 print(f"You have ordered: {snack}")
 
