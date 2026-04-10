@@ -47,7 +47,7 @@ class BaseChai:
 
 class MasalaChai(BaseChai):
     def add_spices(self):
-        print("Adding spices to the chai.")
+        print("Adding spices to the chai")
 
 
 class ChaiShop:
@@ -69,6 +69,3 @@ fancy = FancyChaiShop()
 shop.serve()
 fancy.serve()
 fancy.chai.add_spices()
-
-
-
