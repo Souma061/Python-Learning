@@ -1,69 +1,59 @@
-# TODO: 1 enter message 2 save the encrypted message in a file 3 read the encrypted message from the file 4 decrypt the message and print it
-
-
 import json
-import os
+from pathlib import Path
 from encryption import encrypt_pass, decrypt_pass
 
-FILE = "storage.json"
+FILE = Path(__file__).resolve().parent / "storage.json"
 
 
 def load_data(master_pass):
-    if not os.path.exists(FILE):
+    if not FILE.exists():
         return {}
 
-    with open(FILE, "r") as f:
+    with open(FILE, "r", encoding="utf-8") as f:
         encrypted = f.read()
 
     if not encrypted:
         return {}
 
     try:
-        decreapted = decrypt_pass(encrypted, master_pass)
-        return json.loads(decreapted)
-    except Exception as e:
-        print("Error decrypting data. Check your master password.")
+        decrypted = decrypt_pass(encrypted, master_pass)
+        return json.loads(decrypted)
+    except Exception:
         return None
 
 
 def save_data(data, master_pass):
-        encrypted = encrypt_pass(json.dumps(data), master_pass)
-        with open(FILE, "w") as f:
-            f.write(encrypted)
+    encrypted = encrypt_pass(json.dumps(data), master_pass)
+    with open(FILE, "w", encoding="utf-8") as f:
+        f.write(encrypted)
 
 
-def add_entry(data):
-    service = input("Enter service name: ")
-    username = input("Enter username: ")
-    password = input("Enter password: ")
+def set_entry(data, service, username, password):
+    service = service.strip()
+    username = username.strip()
+    password = password.strip()
 
-    if service in data:
-        print("Service already exists. Use update to change the password.")
-        return
-    else:
-        data[service] = {"username": username, "password": password}
-        print(f"Entry for {service} added.")
+    if not service or not username or not password:
+        raise ValueError("Service, username, and password are required.")
+
+    data[service] = {"username": username, "password": password}
 
 
-
-def view_entries(data):
-    if not data:
-        print("No entries found")
-        return
-
-    for service,credentials in data.items():
-        print(f"Service: {service}")
-        print(f"Username: {credentials['username']}")
-        print(f"Password: {credentials['password']}")
-        print("-" * 20)
+def get_entry(data, service):
+    return data.get(service.strip())
 
 
-def search_entries(data):
-    service = input("Enter service name to search: ")
-    if service in data:
-        credentials = data[service]
-        print(f"Service: {service}")
-        print(f"Username: {credentials['username']}")
-        print(f"Password: {credentials['password']}")
-    else:
-        print("Service not found.")
+def list_entries(data, search_term=""):
+    search_term = search_term.strip().lower()
+    entries = []
+
+    for service, credentials in sorted(data.items()):
+        if search_term and search_term not in service.lower():
+            continue
+        entries.append((service, credentials["username"], credentials["password"]))
+
+    return entries
+
+
+def delete_entry(data, service):
+    return data.pop(service, None) is not None

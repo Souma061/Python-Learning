@@ -18,8 +18,8 @@ def add_expense(amount: float,notes: str, category: str = "other")-> Expense:
             date = date.today()
         )
         session.add(expense)
-        session.commit()
-        session.refresh(expense)
+        session.commit() # this line is necessary to generate the ID for the expense
+        session.refresh(expense) # this line is necessary to update the expense object with the generated ID
         return expense
 
 
@@ -40,7 +40,7 @@ def delete_expenses(expense_id: int) -> bool:
         expense = session.query(Expense).filter(Expense.id == expense_id).first()
         if expense:
             session.delete(expense)
-            session.commit()
+            session.commit() # this line is necessary to persist the deletion in the database
             return True
         return False
 
@@ -63,5 +63,3 @@ def sort_by_category(expenses: list[Expense]) -> dict[str, list[Expense]]:
             sorted_expenses[category] = []
         sorted_expenses[category].append(expense)
     return sorted_expenses
-
-
